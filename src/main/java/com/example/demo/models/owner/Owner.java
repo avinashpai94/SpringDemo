@@ -2,13 +2,13 @@ package com.example.demo.models.owner;
 
 import com.example.demo.models.Person;
 import com.example.demo.models.pet.Pet;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.core.style.ToStringCreator;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -23,6 +23,7 @@ import java.util.List;
 @Table(name = "owners")
 public class Owner extends Person {
 
+    @JsonProperty
     @Column(name = "address")
     private String address;
 

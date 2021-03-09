@@ -2,6 +2,7 @@ package com.example.demo.models.vet;
 
 import com.example.demo.models.Person;
 import com.example.demo.models.appointment.Appointment;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,7 @@ import java.util.List;
 @Table(name = "vets")
 public class Vet extends Person {
 
+    @JsonProperty
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "vet_specialties", joinColumns = @JoinColumn(name = "vet_id"),
             inverseJoinColumns = @JoinColumn(name = "specialty_id"))

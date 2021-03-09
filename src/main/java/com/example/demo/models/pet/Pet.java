@@ -2,7 +2,7 @@ package com.example.demo.models.pet;
 
 import com.example.demo.models.NamedEntity;
 import com.example.demo.models.appointment.Appointment;
-import com.example.demo.models.owner.Owner;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +13,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDate;
@@ -31,13 +29,16 @@ import java.util.List;
 @Table(name = "pets")
 public class Pet extends NamedEntity {
 
+    @JsonProperty
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthDate;
+    private String birthDate;
 
+    @JsonProperty
     @Column(name = "type")
     private Integer type;
 
+    @JsonProperty
     @Column(name = "owner_id")
     private Integer ownerId;
 

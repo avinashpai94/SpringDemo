@@ -20,7 +20,7 @@ public interface OwnerRepository extends CrudRepository<Owner, Integer> {
 
     @Query(value = "SELECT o FROM Owner o where o.phoneNumber = :phoneNumber")
     @Transactional(readOnly = true)
-    Owner findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    Optional<Owner> findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
     /**
      * Retrieve an {@link Owner} from the data store by id.

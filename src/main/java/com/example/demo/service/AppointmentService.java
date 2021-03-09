@@ -6,7 +6,6 @@ import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.dto.models.PetDto;
 import com.example.demo.dto.models.VetDto;
 import com.example.demo.models.appointment.Appointment;
-import com.example.demo.models.owner.Owner;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public interface AppointmentService {
 
     Appointment getById(Integer appointmentId);
 
-    List<Appointment> getByVet(VetDto vetDto);
+    List<Appointment> getByVetId(VetDto vetDto);
 
     List<Appointment> getByPetId(PetDto petDto);
 

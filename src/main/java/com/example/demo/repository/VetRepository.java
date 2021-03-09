@@ -14,7 +14,7 @@ public interface VetRepository extends CrudRepository<Vet, Integer> {
      * @param id the id to search for
      * @return the {@link Vet} if found
      */
-    @Query(value = "SELECT * FROM vets WHERE vet.id =:id", nativeQuery = true)
+    @Query(value = "SELECT v FROM Vet v WHERE v.id =:id")
     @Transactional(readOnly = true)
     Vet findVetById(@Param("id") Integer id);
 

@@ -3,10 +3,11 @@ package com.example.demo.service;
 import com.example.demo.models.owner.Owner;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OwnerService {
 
-    Owner getById(Integer ownerId);
+    Optional<Owner> getById(Integer ownerId);
 
     Owner getByPhoneNumber(String phoneNumber);
 

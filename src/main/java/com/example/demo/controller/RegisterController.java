@@ -1,8 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.requests.OwnerSignUpRequest;
+import com.example.demo.controller.requests.PetSignUpRequest;
+import com.example.demo.controller.requests.VetSignUpRequest;
+import com.example.demo.models.appointment.Appointment;
 import com.example.demo.models.owner.Owner;
 import com.example.demo.models.pet.Pet;
 import com.example.demo.models.vet.Vet;
+import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
 import com.example.demo.repository.VetRepository;
@@ -25,42 +30,37 @@ class RegisterController {
     private final String OK_RESPONSE = "OK_RESPONSE";
 
     @Autowired
-    private final OwnerRepository ownerRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    @Autowired
-    private final PetRepository petRepository;
-
-    @Autowired
-    private final VetRepository vetRepository;
-
-    public RegisterController(OwnerRepository ownerRepository, PetRepository petRepository, VetRepository vetRepository) {
-        this.ownerRepository = ownerRepository;
-        this.petRepository = petRepository;
-        this.vetRepository = vetRepository;
-
+    public RegisterController(AppointmentRepository appointmentRepository) {
+        this.appointmentRepository = appointmentRepository;
     }
 
     @PostMapping("/owner")
-    public ResponseEntity<String> registerOwner(@Valid Owner owner) {
-        //perform validation using owner service
+    public ResponseEntity<String> registerOwner(@Valid OwnerSignUpRequest ownerSignUpRequest) {
+        Owner owner = ownerSignUpRequest.toOwner();
+        //perform validation using ownerService
         return new ResponseEntity<String>(OK_RESPONSE, HttpStatus.OK);
     }
 
     @PostMapping("/pet")
-    public ResponseEntity<String> registerPet(@Valid Pet pet) {
+    public ResponseEntity<String> registerPet(@Valid PetSignUpRequest petSignUpRequest) {
+        Pet pet = petSignUpRequest.toPet();
         //perform validation using pet service
         return new ResponseEntity<String>(OK_RESPONSE, HttpStatus.OK);
     }
 
     @PostMapping("/vet")
-    public ResponseEntity<String> registerVet(@Valid Vet vet) {
+    public ResponseEntity<String> registerVet(@Valid VetSignUpRequest vetSignUpRequest) {
+        Vet vet = vetSignUpRequest.toVet();
         //perform validation using vet service
         return new ResponseEntity<String>(OK_RESPONSE, HttpStatus.OK);
     }
 
     @GetMapping("/test/{id}")
     ResponseEntity<String> hello(@PathVariable Integer id) {
-        Optional<Owner> owner = ownerRepository.findById(id);
-        return owner.map(value -> new ResponseEntity<>(value.toString(), HttpStatus.OK)).orElse(null);
+//        Optional<Appointment> appointment = appointmentRepository.findById(id);
+//        return appointment.map(value -> new ResponseEntity<>(value.toString(), HttpStatus.OK)).orElse(null);
+        return new ResponseEntity<>("Hello", HttpStatus.OK);
     }
 }

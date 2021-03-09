@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class NamedEntity extends BaseEntity {
 
+    @JsonProperty
     @Column(name = "name")
     private String name;
 
