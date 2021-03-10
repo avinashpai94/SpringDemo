@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 

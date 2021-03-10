@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.models.OwnerDto;
+import com.example.demo.dto.models.PetDto;
 import com.example.demo.models.owner.Owner;
 import com.example.demo.models.pet.Pet;
 import com.example.demo.models.pet.PetList;
@@ -13,9 +14,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class PetServiceImpl implements PetService{
 
     @Autowired
@@ -25,6 +28,7 @@ public class PetServiceImpl implements PetService{
     OwnerRepository ownerRepository;
 
     private final String missingPet = "Pet cannot be associated with %s";
+
     @Override
     public ResponseEntity<String> getByOwner(OwnerDto ownerDto) throws JsonProcessingException {
         if (ownerDto == null || ownerDto.getId() == null || ownerDto.getPhoneNumber() == null) {
@@ -69,5 +73,10 @@ public class PetServiceImpl implements PetService{
             Pet pet = petOptional.get();
             return new ResponseEntity<String>(pet.toJSONString(), HttpStatus.OK);
         }
+    }
+
+    @Override
+    public ResponseEntity<String> createNewPet(PetDto petDto) {
+        return null;
     }
 }

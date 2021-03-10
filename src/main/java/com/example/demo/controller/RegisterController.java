@@ -4,14 +4,17 @@ import com.example.demo.controller.requests.OwnerSignUpRequest;
 import com.example.demo.controller.requests.PetSignUpRequest;
 import com.example.demo.controller.requests.VetSignUpRequest;
 import com.example.demo.dto.mapper.OwnerMapper;
+import com.example.demo.dto.mapper.PetMapper;
 import com.example.demo.dto.mapper.VetMapper;
 import com.example.demo.dto.models.OwnerDto;
+import com.example.demo.dto.models.PetDto;
 import com.example.demo.dto.models.VetDto;
 import com.example.demo.models.pet.Pet;
 import com.example.demo.models.vet.Speciality;
 import com.example.demo.models.vet.SpecialtyList;
 import com.example.demo.models.vet.Vet;
 import com.example.demo.service.OwnerServiceImpl;
+import com.example.demo.service.PetServiceImpl;
 import com.example.demo.service.VetServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ class RegisterController {
     @Autowired
     VetServiceImpl vetService;
 
+    @Autowired
+    PetServiceImpl petService;
+
     @PostMapping("/owner")
     public ResponseEntity<String> registerOwner(@RequestBody OwnerSignUpRequest ownerSignUpRequest) throws JsonProcessingException {
         OwnerDto ownerDto = OwnerMapper.toOwnerDto(ownerSignUpRequest.toOwner());
@@ -48,9 +54,9 @@ class RegisterController {
 
     @PostMapping("/pet")
     public ResponseEntity<String> registerPet(@RequestBody PetSignUpRequest petSignUpRequest) {
-        Pet pet = petSignUpRequest.toPet();
+        PetDto petDto = PetMapper.toPetDto(petSignUpRequest.toPet());
         //perform validation using pet service
-        return new ResponseEntity<String>(OK_RESPONSE, HttpStatus.OK);
+        return petService.createNewPet(petDto);
     }
 
     @PostMapping("/vet")

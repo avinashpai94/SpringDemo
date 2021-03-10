@@ -131,7 +131,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         AppointmentDto appointmentDto = AppointmentMapper.toAppointmentDto(appointmentSignUpRequest.toAppointment());
         String validationError = "Appointment Description or Time Slot missing";
         String timeslotOccupiedError = "Appointment could not be booked because slot already occupied";
-        if (!validate(appointmentDto)) {
+        if (!validateAppointment(appointmentDto)) {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.APPOINTMENT,
                     validationError), HttpStatus.NOT_FOUND);
         }
@@ -177,7 +177,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return new ResponseEntity<>(appointment.toString(), HttpStatus.OK);
     }
 
-    private boolean validate(AppointmentDto appointmentDto) {
+    private boolean validateAppointment(AppointmentDto appointmentDto) {
         return !appointmentDto.getDescription().isEmpty() && !appointmentDto.getTimeSlot().isEmpty();
     }
 }

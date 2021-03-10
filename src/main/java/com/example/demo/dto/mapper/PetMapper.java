@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PetMapper {
-    public PetDto toPetDto(Pet pet) {
+    public static PetDto toPetDto(Pet pet) {
         return new PetDto()
                 .setId(pet.getId())
                 .setName(pet.getName())
