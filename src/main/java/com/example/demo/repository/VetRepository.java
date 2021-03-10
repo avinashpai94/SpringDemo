@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 public interface VetRepository extends CrudRepository<Vet, Integer> {
     /**
@@ -16,6 +18,11 @@ public interface VetRepository extends CrudRepository<Vet, Integer> {
      */
     @Query(value = "SELECT v FROM Vet v WHERE v.id =:id")
     @Transactional(readOnly = true)
-    Vet findVetById(@Param("id") Integer id);
+    Optional<Vet> findVetById(@Param("id") Integer id);
+
+
+    @Query(value = "SELECT v FROM Vet v WHERE v.phoneNumber =:phoneNumber")
+    @Transactional(readOnly = true)
+    Optional<Vet> findVetByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
 }

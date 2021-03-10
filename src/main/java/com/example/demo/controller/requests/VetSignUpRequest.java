@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Getter
@@ -17,7 +18,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VetSignUpRequest extends SignUpRequest {
 
-    private List<Integer> Specialities;
+    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    private List<Integer> specialities;
 
     public Vet toVet() {
         Vet vet = new Vet();

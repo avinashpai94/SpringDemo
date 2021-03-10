@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class VetMapper {
-    public VetDto toVetDto(Vet vet) {
+    public static VetDto toVetDto(Vet vet) {
         return new VetDto()
                 .setFirstName(vet.getFirstName())
                 .setLastName(vet.getLastName())

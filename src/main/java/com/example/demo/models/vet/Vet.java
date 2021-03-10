@@ -1,8 +1,13 @@
 package com.example.demo.models.vet;
 
+import com.example.demo.dto.models.OwnerDto;
+import com.example.demo.dto.models.VetDto;
 import com.example.demo.models.Person;
 import com.example.demo.models.appointment.Appointment;
+import com.example.demo.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
@@ -37,7 +43,10 @@ public class Vet extends Person {
             inverseJoinColumns = @JoinColumn(name = "specialty_id"))
     private List<Speciality> specialties;
 
-    @Transient
+    @JsonProperty
+    @OneToMany
+    @JoinTable(name = "appointments", joinColumns = @JoinColumn(name = "vet_id"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private List<Appointment> appointments = new ArrayList<>();
 
     protected List<Appointment> getAppointmentInternal() {
@@ -86,6 +95,21 @@ public class Vet extends Person {
 
     public void addSpecialty(Speciality speciality) {
         getSpecialtiesInternal().add(speciality);
+    }
+
+    public String toJSONString() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
+
+    public Vet(VetDto vetDto) {
+        this.setFirstName(vetDto.getFirstName());
+        this.setLastName(vetDto.getLastName());
+        this.setAppointments(vetDto.getAppointments());
+        this.setSpecialties(vetDto.getSpecialties());
+        this.setEmailId(vetDto.getEmailId());
+        this.setPhoneNumber(vetDto.getPhoneNumber());
+        this.setCreatedAt(DateUtils.DbDateTimeString());
     }
 
 }

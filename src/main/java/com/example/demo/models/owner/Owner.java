@@ -1,8 +1,13 @@
 package com.example.demo.models.owner;
 
+import com.example.demo.dto.models.AppointmentDto;
+import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.models.Person;
 import com.example.demo.models.pet.Pet;
+import com.example.demo.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.support.MutableSortDefinition;
@@ -11,6 +16,8 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -28,7 +35,13 @@ public class Owner extends Person {
     private String address;
 
     @OneToMany
+    @JoinTable(name = "pets", joinColumns = @JoinColumn(name = "owner_id"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private List<Pet> pets;
+
+    public Owner() {
+
+    }
 
     protected List<Pet> getPetsInternal() {
         if (this.pets == null) {
@@ -93,6 +106,21 @@ public class Owner extends Person {
                 .append("email", this.getEmailId())
                 .append("address", this.getAddress())
                 .toString();
+    }
+
+    public String toJSONString() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
+
+    public Owner(OwnerDto ownerDto) {
+        this.setFirstName(ownerDto.getFirstName());
+        this.setLastName(ownerDto.getLastName());
+        this.setPets(ownerDto.getPets());
+        this.setAddress(ownerDto.getAddress());
+        this.setEmailId(ownerDto.getEmailId());
+        this.setPhoneNumber(ownerDto.getPhoneNumber());
+        this.setCreatedAt(DateUtils.DbDateTimeString());
     }
 
 

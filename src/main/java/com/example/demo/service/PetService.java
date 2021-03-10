@@ -2,13 +2,15 @@ package com.example.demo.service;
 
 import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.models.pet.Pet;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface PetService {
 
-    List<Pet> getByOwner(OwnerDto ownerDto);
+    ResponseEntity<String> getByOwner(OwnerDto ownerDto) throws JsonProcessingException;
 
-    Pet getById(Integer petId);
+    ResponseEntity<String> getById(Integer petId) throws JsonProcessingException;
 
 }

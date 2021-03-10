@@ -1,26 +1,26 @@
 package com.example.demo.service;
 
 
-import com.example.demo.dto.models.AppointmentDto;
 import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.dto.models.PetDto;
 import com.example.demo.dto.models.VetDto;
-import com.example.demo.models.appointment.Appointment;
-
-import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 
 public interface AppointmentService {
 
-    Appointment getById(Integer appointmentId);
+    ResponseEntity<String> getById(Integer appointmentId) throws JsonProcessingException;
 
-    List<Appointment> getByVetId(VetDto vetDto);
+    ResponseEntity<String> getByVetId(VetDto vetDto) throws JsonProcessingException;
 
-    List<Appointment> getByPetId(PetDto petDto);
+    ResponseEntity<String> getByPetId(PetDto petDto) throws JsonProcessingException;
 
-    List<Appointment> getByOwnerId(OwnerDto ownerDto);
+    ResponseEntity<String> getByOwnerId(OwnerDto ownerDto) throws JsonProcessingException;
 
-    List<Appointment> getByTime(String startTime, String endTime);
+    ResponseEntity<String> getByTime(String startTime, String endTime) throws JsonProcessingException;
 
-    Appointment bookAppointment(AppointmentDto appointmentDto);
+    ResponseEntity<String> bookAppointment(String appointmentRequest) throws JsonProcessingException;
+
+    ResponseEntity<String> cancelAppointment(Integer appointmentId) throws JsonProcessingException;
 
 }

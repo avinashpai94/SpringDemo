@@ -1,16 +1,15 @@
 package com.example.demo.service;
 
-import com.example.demo.models.owner.Owner;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.demo.dto.models.OwnerDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 
 public interface OwnerService {
 
-    Optional<Owner> getById(Integer ownerId);
+    ResponseEntity<String> getById(Integer ownerId) throws JsonProcessingException;
 
-    Owner getByPhoneNumber(String phoneNumber);
+    ResponseEntity<String> getByPhoneNumber(String phoneNumber) throws JsonProcessingException;
 
-    List<Owner> getByName(String firstName, String lastName);
+    ResponseEntity<String> createNewOwner(OwnerDto ownerDto) throws JsonProcessingException;
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.models.appointment.Appointment;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -59,5 +60,15 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
     @Query(value = "SELECT a FROM Appointment a WHERE a.id =:id")
     @Transactional(readOnly = true)
     Optional<Appointment> findAppointmentById(@Param("id") Integer id);
+
+    /**
+     * Retrieve an {@link Appointment} from the data store by id.
+     * @param id the id to search for
+     * @return the {@link Appointment} if found
+     */
+    @Query(value = "UPDATE Appointment a SET a.canceled = true WHERE a.id =:id")
+    @Modifying
+    @Transactional()
+    void cancelAppointment(@Param("id") Integer id);
 
 }

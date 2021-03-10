@@ -2,18 +2,20 @@ package com.example.demo.service;
 
 import com.example.demo.dto.models.VetDto;
 import com.example.demo.models.vet.Speciality;
-import com.example.demo.models.vet.Vet;
+import com.example.demo.models.vet.SpecialtyList;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface VetService {
 
-    Vet getById(Integer vetId);
+    ResponseEntity<String> getById(Integer vetId) throws JsonProcessingException;
 
-    Vet getByPhoneNumber(String phoneNumber);
+    ResponseEntity<String> getByPhoneNumber(String phoneNumber) throws JsonProcessingException;
 
-    List<Vet> getByName(String firstName, String lastName);
+    ResponseEntity<String> createNewVet(VetDto vetDto) throws JsonProcessingException;
 
-    List<Speciality> getVetSpeciality(VetDto vetDto);
+    ResponseEntity<String> addVetSpecialities(Integer vetId, SpecialtyList specialityList) throws JsonProcessingException;
 
 }
