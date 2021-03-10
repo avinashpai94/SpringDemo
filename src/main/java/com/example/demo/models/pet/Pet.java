@@ -1,7 +1,9 @@
 package com.example.demo.models.pet;
 
+import com.example.demo.dto.models.PetDto;
 import com.example.demo.models.NamedEntity;
 import com.example.demo.models.appointment.Appointment;
+import com.example.demo.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,6 +58,14 @@ public class Pet extends NamedEntity {
     public String toJSONString() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(this);
+    }
+
+    public Pet (PetDto petDto) {
+        this.setType(petDto.getType());
+        this.setOwnerId(petDto.getOwnerId());
+        this.setBirthDate(petDto.getBirthDate());
+        this.setName(petDto.getName());
+        this.setCreatedAt(DateUtils.DbDateTimeString());
     }
 
 }

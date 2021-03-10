@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.mapper.PetMapper;
 import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.dto.models.PetDto;
 import com.example.demo.models.owner.Owner;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -41,15 +44,15 @@ public class PetServiceImpl implements PetService{
         if (ownerDto.getId() != null) {
             Optional<Owner> owner = ownerRepository.findById(ownerDto.getId());
             if (owner.isEmpty()) {
-                return new ResponseEntity<>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.PET,
-                        String.format(String.format(missingPet, "Owner"), "ID", null)), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(ExceptionClass.toJSONString(ExceptionType.ENTITY_NOT_FOUND, EntityType.PET,
+                        String.format(String.format(missingPet, "Owner"), "ID", null)), HttpStatus.NOT_FOUND);
             }
             petList.setPetList(petRepository.findByOwnerId(ownerDto.getId()));
         } else {
             Optional<Owner> owner = ownerRepository.findByPhoneNumber(ownerDto.getPhoneNumber());
             if (owner.isEmpty()) {
-                return new ResponseEntity<>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.PET,
-                        String.format(String.format(missingPet, "Owner"), "Phone Number", null)), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(ExceptionClass.toJSONString(ExceptionType.ENTITY_NOT_FOUND, EntityType.PET,
+                        String.format(String.format(missingPet, "Owner"), "Phone Number", null)), HttpStatus.NOT_FOUND);
             }
             petList.setPetList(petRepository.findByOwnerId(owner.get().getId()));
         }
@@ -63,26 +66,50 @@ public class PetServiceImpl implements PetService{
     public ResponseEntity<String> getById(Integer petId) throws JsonProcessingException {
         if (petId == null) {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.PET,
-                    String.format(String.format(missingPet, "Pet ID"), "ID", null)), HttpStatus.NOT_FOUND);
+                    String.format(String.format(missingPet, "Pet ID"), "ID", null)), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         Optional<Pet> petOptional = petRepository.findById(petId);
         if (petOptional.isEmpty()) {
-            return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.PET,
-                    String.format(String.format(missingPet, "Owner"), "ID", null)), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.ENTITY_NOT_FOUND, EntityType.PET,
+                    petId.toString()), HttpStatus.NOT_FOUND);
         } else {
             Pet pet = petOptional.get();
             return new ResponseEntity<String>(pet.toJSONString(), HttpStatus.OK);
         }
     }
 
-    /*
-    * 1. Write this function
-    * 2. Finish Pet UTs
-    * 3. Set up functional Test Db
-    * */
-
     @Override
-    public ResponseEntity<String> createNewPet(PetDto petDto) {
-        return null;
+    public ResponseEntity<String> createNewPet(PetDto petDto) throws JsonProcessingException {
+        List<String> validations = validatePet(petDto);
+        if (!validations.isEmpty()) {
+            return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.PET,
+                    validations.toString()), HttpStatus.NOT_FOUND);
+        }
+        //map dto to object and save in table
+        Pet pet = new Pet(petDto);
+        petRepository.save(pet);
+        return new ResponseEntity<>(pet.toJSONString(), HttpStatus.OK);
+    }
+
+
+    public List<String> validatePet(PetDto petDto) {
+        List<String> validations = new ArrayList<>();
+        if (petDto.getName().isEmpty()) {
+            validations.add("Pet missing name");
+        }
+        if (petDto.getOwnerId() == null) {
+            validations.add("No owner associated with pet");
+        } else {
+            Optional<Owner> owner = ownerRepository.findById(petDto.getOwnerId());
+            if (owner.isEmpty()) {
+                validations.add("No such owner");
+            }
+        }
+
+        if (petDto.getBirthDate().isEmpty()) {
+            validations.add("Pet missing birthday");
+        }
+
+        return validations;
     }
 }

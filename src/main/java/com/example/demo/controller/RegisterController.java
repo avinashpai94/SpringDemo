@@ -9,10 +9,7 @@ import com.example.demo.dto.mapper.VetMapper;
 import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.dto.models.PetDto;
 import com.example.demo.dto.models.VetDto;
-import com.example.demo.models.pet.Pet;
-import com.example.demo.models.vet.Speciality;
 import com.example.demo.models.vet.SpecialtyList;
-import com.example.demo.models.vet.Vet;
 import com.example.demo.service.OwnerServiceImpl;
 import com.example.demo.service.PetServiceImpl;
 import com.example.demo.service.VetServiceImpl;
@@ -27,9 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/register")
@@ -53,7 +47,7 @@ class RegisterController {
     }
 
     @PostMapping("/pet")
-    public ResponseEntity<String> registerPet(@RequestBody PetSignUpRequest petSignUpRequest) {
+    public ResponseEntity<String> registerPet(@RequestBody PetSignUpRequest petSignUpRequest) throws JsonProcessingException {
         PetDto petDto = PetMapper.toPetDto(petSignUpRequest.toPet());
         //perform validation using pet service
         return petService.createNewPet(petDto);
@@ -73,8 +67,6 @@ class RegisterController {
 
     @GetMapping("/test/{id}")
     ResponseEntity<String> hello(@PathVariable Integer id) {
-//        Optional<Appointment> appointment = appointmentRepository.findById(id);
-//        return appointment.map(value -> new ResponseEntity<>(value.toString(), HttpStatus.OK)).orElse(null);
         return new ResponseEntity<>("Hello", HttpStatus.OK);
     }
 }

@@ -12,7 +12,7 @@ public class PetMapper {
                 .setName(pet.getName())
                 .setOwnerId(pet.getOwnerId())
                 .setBirthDate(pet.getBirthDate().toString())
-                .setType(pet.getType().toString())
+                .setType(pet.getType())
                 .setAppointments(pet.getAppointments());
     }
 }

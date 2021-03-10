@@ -29,7 +29,7 @@ public class PetDto {
 
     private String birthDate;
 
-    private String type;
+    private Integer type;
 
     private Integer ownerId;
 

@@ -14,5 +14,5 @@ public interface PetService {
 
     ResponseEntity<String> getById(Integer petId) throws JsonProcessingException;
 
-    ResponseEntity<String> createNewPet(PetDto petDto);
+    ResponseEntity<String> createNewPet(PetDto petDto) throws JsonProcessingException;
 }
