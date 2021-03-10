@@ -31,7 +31,7 @@ public class PetServiceImpl implements PetService{
 
     @Override
     public ResponseEntity<String> getByOwner(OwnerDto ownerDto) throws JsonProcessingException {
-        if (ownerDto == null || ownerDto.getId() == null || ownerDto.getPhoneNumber() == null) {
+        if (ownerDto.getId() == null && ownerDto.getPhoneNumber() == null) {
             return new ResponseEntity<>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.PET,
                     String.format(String.format(missingPet, "Owner"), "ID/Phone Number", null)), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -54,7 +54,7 @@ public class PetServiceImpl implements PetService{
             petList.setPetList(petRepository.findByOwnerId(owner.get().getId()));
         }
 
-        return new ResponseEntity<>(petList.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(petList.toJSONString(), HttpStatus.OK);
 
     }
 
@@ -74,6 +74,12 @@ public class PetServiceImpl implements PetService{
             return new ResponseEntity<String>(pet.toJSONString(), HttpStatus.OK);
         }
     }
+
+    /*
+    * 1. Write this function
+    * 2. Finish Pet UTs
+    * 3. Set up functional Test Db
+    * */
 
     @Override
     public ResponseEntity<String> createNewPet(PetDto petDto) {

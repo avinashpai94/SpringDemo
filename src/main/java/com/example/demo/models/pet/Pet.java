@@ -15,6 +15,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDate;
@@ -44,30 +47,11 @@ public class Pet extends NamedEntity {
     @Column(name = "owner_id")
     private Integer ownerId;
 
-    @Transient
+    @JsonProperty
+    @OneToMany
+    @JoinTable(name = "appointments", joinColumns = @JoinColumn(name = "pet_id"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private List<Appointment> appointments = new ArrayList<>();
-
-    protected List<Appointment> getAppointmentInternal() {
-        if (this.appointments == null) {
-            this.appointments = new ArrayList<>();
-        }
-        return this.appointments;
-    }
-
-    protected void setAppointmentInternal(Collection<Appointment> visits) {
-        this.appointments = new ArrayList<>(visits);
-    }
-
-    public List<Appointment> getAppointment() {
-        List<Appointment> sortedVisits = new ArrayList<>(getAppointmentInternal());
-        PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-        return Collections.unmodifiableList(sortedVisits);
-    }
-
-    public void setAppointment(Appointment appointment) {
-        getAppointmentInternal().add(appointment);
-        appointment.setPetId(this.getId());
-    }
 
     public String toJSONString() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

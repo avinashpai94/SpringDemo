@@ -41,9 +41,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     PetRepository petRepository;
 
-    @Autowired
-    PetMapper petMapper;
-
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -82,7 +79,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public ResponseEntity<String> getByOwnerId(OwnerDto ownerDto) throws JsonProcessingException {
 
-        List<Appointment> appointments = new ArrayList<Appointment>();
         Optional<Owner> ownerOptional = ownerRepository.findById(ownerDto.getId());
         String missingOwnerAppointment = "No Appointment Against Owner with ID: ";
         if (ownerOptional.isEmpty()) {
@@ -98,16 +94,14 @@ public class AppointmentServiceImpl implements AppointmentService {
                     missingPets +ownerDto.getId()), HttpStatus.NOT_FOUND);
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        List<Appointment> appointmentList = new ArrayList<>();
 
         for (Pet pet : owner.getPets()) {
-            PetDto petDto = petMapper.toPetDto(pet);
-            AppointmentList appointmentList = objectMapper.readValue(getByPetId(petDto).getBody(), AppointmentList.class);
-            appointments.addAll(appointmentList.getAppointmentList());
-
+            appointmentList.addAll(pet.getAppointments());
         }
-        if (!appointments.isEmpty()) {
-            return new ResponseEntity<>(appointments.toString(), HttpStatus.OK);
+
+        if (!appointmentList.isEmpty()) {
+            return new ResponseEntity<>(appointmentList.toString(), HttpStatus.OK);
         }
         //throw exception
         return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.ENTITY_NOT_FOUND, EntityType.APPOINTMENT,
