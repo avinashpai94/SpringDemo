@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.models.VetDto;
+import com.example.demo.models.owner.Owner;
 import com.example.demo.models.vet.SpecialtyList;
 import com.example.demo.models.vet.Vet;
 import com.example.demo.repository.AppointmentRepository;
@@ -71,6 +72,11 @@ public class VetServiceImpl implements VetService {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.VET,
                     validations.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
+            Optional<Vet> vetOptional = vetRepository.findVetByPhoneNumber(vetDto.getPhoneNumber());
+            if (vetOptional.isPresent()) {
+                return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.VET,
+                        "Phone Number Registered to User"), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             //map dto to object and save in table
             Vet vet = new Vet(vetDto);
             vetRepository.save(vet);

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/register")
 class RegisterController {
-
-    private final String OK_RESPONSE = "OK_RESPONSE";
 
     @Autowired
     OwnerServiceImpl ownerService;
@@ -49,7 +49,6 @@ class RegisterController {
     @PostMapping("/pet")
     public ResponseEntity<String> registerPet(@RequestBody PetSignUpRequest petSignUpRequest) throws JsonProcessingException {
         PetDto petDto = PetMapper.toPetDto(petSignUpRequest.toPet());
-        //perform validation using pet service
         return petService.createNewPet(petDto);
     }
 

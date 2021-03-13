@@ -67,6 +67,13 @@ public class OwnerServiceImpl implements OwnerService {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.OWNER,
                     validations.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
+
+            //Check if owner already exists by phone number
+            Optional<Owner> ownerOptional = ownerRepository.findByPhoneNumber(ownerDto.getPhoneNumber());
+            if (ownerOptional.isPresent()) {
+                return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.OWNER,
+                        "Phone Number Registered to User"), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             //map dto to object and save in table
             Owner owner = new Owner(ownerDto);
             ownerRepository.save(owner);
