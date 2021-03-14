@@ -51,7 +51,7 @@ public class VetServiceImpl implements VetService {
 
     @Override
     public ResponseEntity<String> getByPhoneNumber(String phoneNumber) throws JsonProcessingException {
-        if (phoneNumber.isEmpty()) {
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
             return new ResponseEntity<>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.VET,
                     String.format(missingVet, "Phone Number", "Blank")), HttpStatus.INTERNAL_SERVER_ERROR);
         }

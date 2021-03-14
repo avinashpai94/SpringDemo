@@ -1,6 +1,5 @@
 package com.example.demo.models.owner;
 
-import com.example.demo.dto.models.AppointmentDto;
 import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.models.Person;
 import com.example.demo.models.pet.Pet;

@@ -6,6 +6,7 @@ import com.example.demo.dto.models.PetDto;
 import com.example.demo.models.owner.Owner;
 import com.example.demo.models.pet.Pet;
 import com.example.demo.models.pet.PetList;
+import com.example.demo.models.pet.PetType;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
 import com.example.demo.utils.exception.EntityType;
@@ -71,7 +72,7 @@ public class PetServiceImpl implements PetService{
         Optional<Pet> petOptional = petRepository.findById(petId);
         if (petOptional.isEmpty()) {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.ENTITY_NOT_FOUND, EntityType.PET,
-                    petId.toString()), HttpStatus.NOT_FOUND);
+                    "No Pet associated with ID: "+ petId.toString()), HttpStatus.NOT_FOUND);
         } else {
             Pet pet = petOptional.get();
             return new ResponseEntity<String>(pet.toJSONString(), HttpStatus.OK);
@@ -97,6 +98,7 @@ public class PetServiceImpl implements PetService{
         if (petDto.getName().isEmpty()) {
             validations.add("Pet missing name");
         }
+
         if (petDto.getOwnerId() == null) {
             validations.add("No owner associated with pet");
         } else {
@@ -104,6 +106,10 @@ public class PetServiceImpl implements PetService{
             if (owner.isEmpty()) {
                 validations.add("No such owner");
             }
+        }
+
+        if (!PetType.contains(petDto.getType())) {
+            validations.add("Invalid Pet Type");
         }
 
         if (petDto.getBirthDate().isEmpty()) {

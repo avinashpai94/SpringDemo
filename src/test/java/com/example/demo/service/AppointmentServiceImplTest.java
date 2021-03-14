@@ -8,9 +8,11 @@ import com.example.demo.dto.models.VetDto;
 import com.example.demo.models.appointment.Appointment;
 import com.example.demo.models.owner.Owner;
 import com.example.demo.models.pet.Pet;
+import com.example.demo.models.vet.Vet;
 import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
+import com.example.demo.repository.VetRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,9 @@ class AppointmentServiceImplTest {
 
     @Mock
     PetRepository petRepository;
+
+    @Mock
+    VetRepository vetRepository;
 
     @InjectMocks
     AppointmentServiceImpl appointmentService;
@@ -173,7 +178,9 @@ class AppointmentServiceImplTest {
         appointment.setTimeSlot(nonClashingTime);
         when(appointmentRepository.findAppointmentsByMembers(mockVetId, mockPetId, mockOwnerId)).
                 thenReturn(List.of(appointment));
-
+        when(vetRepository.findVetById(mockVetId)).thenReturn(Optional.of(new Vet()));
+        when(petRepository.findById(mockPetId)).thenReturn(Optional.of(new Pet()));
+        when(ownerRepository.findById(mockOwnerId)).thenReturn(Optional.of(new Owner()));
         ResponseEntity<String> responseEntity = appointmentService.bookAppointment(mockAppointmentRequest);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
 
@@ -185,7 +192,9 @@ class AppointmentServiceImplTest {
         appointment.setTimeSlot(mockAppointmentTime);
         when(appointmentRepository.findAppointmentsByMembers(mockVetId, mockPetId, mockOwnerId)).
                 thenReturn(List.of(appointment));
-
+        when(vetRepository.findVetById(mockVetId)).thenReturn(Optional.of(new Vet()));
+        when(petRepository.findById(mockPetId)).thenReturn(Optional.of(new Pet()));
+        when(ownerRepository.findById(mockOwnerId)).thenReturn(Optional.of(new Owner()));
         ResponseEntity<String> responseEntity = appointmentService.bookAppointment(mockAppointmentRequest);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

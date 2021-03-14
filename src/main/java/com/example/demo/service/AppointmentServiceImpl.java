@@ -11,9 +11,11 @@ import com.example.demo.models.appointment.Appointment;
 import com.example.demo.models.appointment.AppointmentList;
 import com.example.demo.models.owner.Owner;
 import com.example.demo.models.pet.Pet;
+import com.example.demo.models.vet.Vet;
 import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
+import com.example.demo.repository.VetRepository;
 import com.example.demo.utils.exception.ExceptionClass;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +42,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     PetRepository petRepository;
+
+    @Autowired
+    VetRepository vetRepository;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -110,6 +115,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public ResponseEntity<String> getByTime(String startTime, String endTime) throws JsonProcessingException {
+        if (startTime == null || endTime == null) {
+            return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.APPOINTMENT,
+                    "Missing Start/End Time"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         List<Appointment> appointmentList = appointmentRepository.findAppointmentsByTimeSlot(startTime, endTime);
         if (!appointmentList.isEmpty()) {
             return new ResponseEntity<>(appointmentList.toString(), HttpStatus.OK);
@@ -125,9 +134,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         AppointmentDto appointmentDto = AppointmentMapper.toAppointmentDto(appointmentSignUpRequest.toAppointment());
         String validationError = "Appointment Description or Time Slot missing";
         String timeslotOccupiedError = "Appointment could not be booked because slot already occupied";
-        if (!validateAppointment(appointmentDto)) {
+        List<String> validations = validateAppointment(appointmentDto);
+        if (!validations.isEmpty()) {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.APPOINTMENT,
-                    validationError), HttpStatus.NOT_FOUND);
+                    validations.toString()), HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointmentList = appointmentRepository.findAppointmentsByMembers(appointmentDto.getVetId(),
@@ -171,7 +181,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         return new ResponseEntity<>(appointment.toString(), HttpStatus.OK);
     }
 
-    private boolean validateAppointment(AppointmentDto appointmentDto) {
-        return !appointmentDto.getDescription().isEmpty() && !appointmentDto.getTimeSlot().isEmpty();
+    private List<String> validateAppointment(AppointmentDto appointmentDto) {
+        List<String> validations = new ArrayList<>();
+        Optional<Vet> vet = vetRepository.findVetById(appointmentDto.getVetId());
+        if (vet.isEmpty()) {
+            validations.add(String.format("No Such Vet with ID = %s", appointmentDto.getVetId()));
+        }
+
+        Optional<Pet> pet = petRepository.findById(appointmentDto.getPetId());
+        if (pet.isEmpty()) {
+            validations.add(String.format("No Such Pet with ID = %s", appointmentDto.getPetId()));
+        }
+
+        Optional<Owner> owner = ownerRepository.findById(appointmentDto.getOwnerId());
+        if (owner.isEmpty()) {
+            validations.add(String.format("No Such Owner with ID = %s", appointmentDto.getOwnerId()));
+        }
+        return validations;
     }
 }

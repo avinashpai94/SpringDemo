@@ -18,4 +18,13 @@ public enum PetType {
         return value;
     }
 
+    public static boolean contains(Integer type) {
+        for (PetType p : PetType.values()) {
+            if (p.getValue().equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

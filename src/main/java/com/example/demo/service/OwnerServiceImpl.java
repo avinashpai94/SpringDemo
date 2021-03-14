@@ -46,7 +46,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public ResponseEntity<String> getByPhoneNumber(String phoneNumber) throws JsonProcessingException {
-        if (phoneNumber.isEmpty()) {
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.OWNER,
                     String.format(missingOwner, "Phone Number", phoneNumber)), HttpStatus.INTERNAL_SERVER_ERROR);
         }

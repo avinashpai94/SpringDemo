@@ -5,6 +5,7 @@ import com.example.demo.dto.mapper.PetMapper;
 import com.example.demo.dto.models.PetDto;
 import com.example.demo.models.owner.Owner;
 import com.example.demo.models.pet.Pet;
+import com.example.demo.models.pet.PetType;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -101,6 +102,7 @@ class PetServiceImplTest {
         Pet pet = new Pet();
         pet.setName(mockPetName);
         pet.setBirthDate(mockPetBirthDate);
+        pet.setType(PetType.DOG.getValue());
         pet.setOwnerId(mockOwnerId);
         Owner owner = new Owner();
         owner.setId(mockOwnerId);
