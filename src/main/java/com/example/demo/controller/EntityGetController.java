@@ -47,13 +47,13 @@ public class EntityGetController {
     }
 
     @GetMapping("/pet")
-    public ResponseEntity<String> getPetDetails(@RequestParam(required = false) Integer id, @RequestParam(required = false) Integer owner_id, @RequestParam(required = false) String phoneNumber) throws JsonProcessingException {
+    public ResponseEntity<String> getPetDetails(@RequestParam(required = false) Integer id, @RequestParam(required = false) Integer owner_id, @RequestParam(required = false) String phone_number) throws JsonProcessingException {
         if (id != null) {
             return petService.getById(id);
         } else {
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setId(owner_id);
-            ownerDto.setPhoneNumber(phoneNumber);
+            ownerDto.setPhoneNumber(phone_number);
             return petService.getByOwner(ownerDto);
         }
 

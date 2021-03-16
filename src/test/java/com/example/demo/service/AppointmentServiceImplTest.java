@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.mapper.OwnerMapper;
-import com.example.demo.dto.mapper.PetMapper;
 import com.example.demo.dto.models.OwnerDto;
 import com.example.demo.dto.models.PetDto;
 import com.example.demo.dto.models.VetDto;
@@ -23,12 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 
 @ExtendWith(MockitoExtension.class)
 class AppointmentServiceImplTest {
@@ -155,8 +152,8 @@ class AppointmentServiceImplTest {
 
     @Test
     void getByTime() throws JsonProcessingException {
-        String mockStartTime = "mockStartTime";
-        String mockEndTime = "mockEndTime";
+        String mockStartTime = "0mockStartTime";
+        String mockEndTime = "1mockEndTime";
         when(appointmentRepository.findAppointmentsByTimeSlot(mockStartTime, mockEndTime)).thenReturn(List.of(new Appointment()));
         ResponseEntity<String> responseEntity = appointmentService.getByTime(mockStartTime, mockEndTime);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
@@ -164,8 +161,8 @@ class AppointmentServiceImplTest {
 
     @Test
     void getTimeAppointmentDoesNotExist() throws JsonProcessingException {
-        String mockStartTime = "mockStartTime";
-        String mockEndTime = "mockEndTime";
+        String mockStartTime = "0mockStartTime";
+        String mockEndTime = "1mockEndTime";
         when(appointmentRepository.findAppointmentsByTimeSlot(mockStartTime, mockEndTime)).thenReturn(List.of());
         ResponseEntity<String> responseEntity = appointmentService.getByTime(mockStartTime, mockEndTime);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);

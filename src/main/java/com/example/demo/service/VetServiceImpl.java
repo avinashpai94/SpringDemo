@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Component
 public class VetServiceImpl implements VetService {
@@ -97,6 +98,23 @@ public class VetServiceImpl implements VetService {
         if (vet.getPhoneNumber().isEmpty()) {
             validations.add("Missing Phone Number");
         }
+
+        if (vet.getPhoneNumber().isEmpty()) {
+            validations.add("Missing Phone Number");
+        }
+
+        Pattern phonePattern = Pattern.compile("\\d+(\\.\\d+)?");
+
+        if (!vet.getPhoneNumber().isEmpty() && !phonePattern.matcher(vet.getPhoneNumber()).matches()){
+            validations.add("Invalid Phone Number");
+        }
+
+        Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
+
+        if (!vet.getEmailId().isEmpty() && !emailPattern.matcher(vet.getEmailId()).matches()){
+            validations.add("Invalid Email Id");
+        }
+
         return validations;
     }
 

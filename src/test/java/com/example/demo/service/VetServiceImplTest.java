@@ -82,6 +82,7 @@ class VetServiceImplTest {
         mockVetDto.setFirstName("firstname");
         mockVetDto.setLastName("lastname");
         mockVetDto.setPhoneNumber("123456789");
+        mockVetDto.setEmailId("firstname@lastname.com");
         ResponseEntity<String> vetResponse = vetService.createNewVet(mockVetDto);
         Assertions.assertEquals(vetResponse.getStatusCode(), HttpStatus.OK);
     }
@@ -92,6 +93,7 @@ class VetServiceImplTest {
         mockVetDto.setFirstName("");
         mockVetDto.setLastName("");
         mockVetDto.setPhoneNumber("");
+        mockVetDto.setEmailId("");
         ResponseEntity<String> vetResponse = vetService.createNewVet(mockVetDto);
         Assertions.assertEquals(vetResponse.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

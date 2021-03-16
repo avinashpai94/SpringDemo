@@ -119,6 +119,12 @@ public class AppointmentServiceImpl implements AppointmentService {
             return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.APPOINTMENT,
                     "Missing Start/End Time"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        if (startTime.compareTo(endTime) >= 0) {
+            return new ResponseEntity<String>(ExceptionClass.toJSONString(ExceptionType.VALIDATION_ERROR, EntityType.APPOINTMENT,
+                    "End time must come after start time"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         List<Appointment> appointmentList = appointmentRepository.findAppointmentsByTimeSlot(startTime, endTime);
         if (!appointmentList.isEmpty()) {
             return new ResponseEntity<>(appointmentList.toString(), HttpStatus.OK);

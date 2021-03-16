@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Component
 public class OwnerServiceImpl implements OwnerService {
@@ -83,12 +84,26 @@ public class OwnerServiceImpl implements OwnerService {
 
     public List<String> validateOwner (Owner owner) {
         List<String> validations = new ArrayList<>();
+
         if (owner.getFirstName().isEmpty() || owner.getLastName().isEmpty()) {
             validations.add("Missing First/Last name");
         }
         if (owner.getPhoneNumber().isEmpty()) {
             validations.add("Missing Phone Number");
         }
+
+        Pattern phonePattern = Pattern.compile("\\d+(\\.\\d+)?");
+
+        if (!owner.getPhoneNumber().isEmpty() && !phonePattern.matcher(owner.getPhoneNumber()).matches()){
+            validations.add("Invalid Phone Number");
+        }
+
+        Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
+
+        if (!owner.getEmailId().isEmpty() && !emailPattern.matcher(owner.getEmailId()).matches()){
+            validations.add("Invalid Email Id");
+        }
+
         return validations;
     }
 }

@@ -82,6 +82,7 @@ class OwnerServiceImplTest {
         mockOwnerDto.setFirstName("firstname");
         mockOwnerDto.setLastName("lastname");
         mockOwnerDto.setPhoneNumber("123456789");
+        mockOwnerDto.setEmailId("firstname@lastname.com");
         ResponseEntity<String> ownerResponse = ownerService.createNewOwner(mockOwnerDto);
         Assertions.assertEquals(ownerResponse.getStatusCode(), HttpStatus.OK);
     }
@@ -92,6 +93,7 @@ class OwnerServiceImplTest {
         mockOwnerDto.setFirstName("");
         mockOwnerDto.setLastName("");
         mockOwnerDto.setPhoneNumber("");
+        mockOwnerDto.setEmailId("");
         ResponseEntity<String> ownerResponse = ownerService.createNewOwner(mockOwnerDto);
         Assertions.assertEquals(ownerResponse.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
