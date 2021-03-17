@@ -99,10 +99,6 @@ public class VetServiceImpl implements VetService {
             validations.add("Missing Phone Number");
         }
 
-        if (vet.getPhoneNumber().isEmpty()) {
-            validations.add("Missing Phone Number");
-        }
-
         Pattern phonePattern = Pattern.compile("\\d+(\\.\\d+)?");
 
         if (!vet.getPhoneNumber().isEmpty() && !phonePattern.matcher(vet.getPhoneNumber()).matches()){
